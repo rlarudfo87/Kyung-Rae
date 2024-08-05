@@ -3,7 +3,7 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 from tensorflow.keras.layers import Dropout
 
 
-# CNN 모델 정의
+# CNN MODEL
 model = Sequential([
     Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
     MaxPooling2D(2, 2),
@@ -16,7 +16,7 @@ model = Sequential([
     Dense(train_generator.num_classes, activation='softmax')
 ])
 
-# 모델 컴파일 - 최적화 알고리즘, 손실 함수, 평가 지표 설정
+# MODEL COMPILE 
 model.compile(optimizer='adam',  # Adam 옵티마이저 사용
               loss='categorical_crossentropy',  # 다중 클래스 분류를 위한 크로스엔트로피 손실 함수 사용
               metrics=['accuracy'])  # 모델의 정확도를 평가 지표로 사용
