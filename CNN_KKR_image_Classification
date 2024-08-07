@@ -1,0 +1,135 @@
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+import os
+import re
+from PIL import Image
+import shutil
+import xml.etree.ElementTree as et
+from sklearn.model_selection import train_test_split
+import random
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import gdown
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+import os
+
+# data directory
+data_dir = "yout data path image folder"
+
+# Create an instance of ImageDataGenerator for data augmentation
+# Rescale pixel values to the range [0, 1] and set aside 20% for validation
+datagen = ImageDataGenerator(rescale=1./255, validation_split=0.2)
+
+# Set up the training data generator - loads images from the directory and provides training data in batches
+train_generator = datagen.flow_from_directory(
+    data_dir,
+    target_size=(150, 150),
+    batch_size=32,
+    class_mode='categorical',
+    subset='training'
+)
+
+# Set up the validation data generator - loads images from the directory and provides validation data in batches
+validation_generator = datagen.flow_from_directory(
+    data_dir,
+    target_size=(150, 150),
+    batch_size=32,
+    class_mode='categorical',
+    subset='validation'
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from tensorflow.keras.layers import Dropout
+
+# Define the CNN_KKR_Image_Clssfication
+model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),  # Convolutional layer with 32 filters
+    MaxPooling2D(2, 2),  # Max pooling layer with pool size of 2x2
+    Conv2D(64, (3, 3), activation='relu'),  # Second convolutional layer with 64 filters
+    MaxPooling2D(2, 2),  # Second max pooling layer
+    Conv2D(128, (3, 3), activation='relu'),  # Third convolutional layer with 128 filters
+    MaxPooling2D(2, 2),  # Third max pooling layer
+    Flatten(),  # Flatten the output to feed into the fully connected layer
+    Dense(512, activation='relu'),  # Fully connected layer with 512 units
+    Dense(train_generator.num_classes, activation='softmax')  # Output layer with softmax activation
+])
+
+# Compile the model - set the optimizer, loss function, and metrics
+model.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Print the model summary
+model.summary()
+
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# Create an ImageDataGenerator for data augmentation and preprocessing
+train_datagen = ImageDataGenerator(rescale=1./255)
+
+# Generate training data
+train_generator = train_datagen.flow_from_directory(
+    data_dir,  # Path to the directory containing the data
+    target_size=(150, 150),  # Resize images to this size
+    batch_size=32,
+    class_mode='categorical'  # Use 'categorical' for multi-class classification
+)
+
+# Check class indices
+class_indices = train_generator.class_indices
+print("Class indices:", class_indices)
+
+# Verify the mapping of class indices to class names
+for class_name, index in class_indices.items():
+    print(f"Class: {class_name}, Index: {index}")
+
+
+# Train the model - use the fit() method to train the model
+history = model.fit(
+    train_generator,
+    epochs=50,
+    validation_data=validation_generator
+)
+
+import os  # Import the os module to interact with the operating system
+print(os.getcwd())  # Print the current working directory
+
+# Evaluate the model on the validation data
+loss, accuracy = model.evaluate(validation_generator)
+print(f"Validation Accuracy: {accuracy:.4f}%")  # Print accuracy to four decimal places
+print(f"Validation Loss: {loss:.4f}")  # Print loss value to four decimal places
+
+# Save the model - save the trained CNN model as a Keras file at the specified path
+model.save('yout path for model save.keras or h5')
+
+# Visualize training results
+import matplotlib.pyplot as plt
+
+# Extract accuracy and loss values from the history object
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = range(len(acc))  # Create a range object for the number of epochs
+
+# Plot training and validation accuracy
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.plot(epochs, acc, 'b', label='Training accuracy')
+plt.plot(epochs, val_acc, 'r', label='Validation accuracy')
+plt.title('Training and validation accuracy')
+plt.legend()
+
+# Plot training and validation loss
+plt.subplot(1, 2, 2)
+plt.plot(epochs, loss, 'b', label='Training loss')
+plt.plot(epochs, val_loss, 'r', label='Validation loss')
+plt.title('Training and validation loss')
+plt.legend()
+
+plt.show()  # Display the plots
