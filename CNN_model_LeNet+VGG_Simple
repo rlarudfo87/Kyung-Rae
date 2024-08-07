@@ -20,7 +20,7 @@ from tensorflow.keras.layers import Dropout
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # Data dir
-data_dir = "yout path/data"
+data_dir = "yout path/image"
 
 datagen = ImageDataGenerator(rescale=1./255, validation_split=0.2)
 
@@ -57,9 +57,9 @@ model = Sequential([
 ])
 
 # MODEL COMPILE
-model.compile(optimizer='adam',  # Adam 옵티마이저 사용
-              loss='categorical_crossentropy',  # 다중 클래스 분류를 위한 크로스엔트로피 손실 함수 사용
-              metrics=['accuracy'])  # 모델의 정확도를 평가 지표로 사용
+model.compile(optimizer='adam', 
+              loss='categorical_crossentropy', 
+              metrics=['accuracy'])  
 
 # MODEL PRINT
 model.summary()
@@ -86,18 +86,18 @@ for class_name, index in class_indices.items():
 #  fit() method model train
 history = model.fit(
     train_generator,
-    epochs=50,
+    epochs=10,
     validation_data=validation_generator
 )
 
 print(os.getcwd())
 
 loss, accuracy = model.evaluate(validation_generator)
-print(f"Validation Accuracy: {accuracy:.4f}%")  
-print(f"Validation Loss: {loss:.4f}")  
+print(f"Validation Accuracy: {accuracy:.3f}%")  
+print(f"Validation Loss: {loss:.3f}")  
 
 # MODEL SAVE
-model.save('"yout path/data"')
+model.save("yout path/data.keras or h5")
 
 
 # Visualize learning outcomes
